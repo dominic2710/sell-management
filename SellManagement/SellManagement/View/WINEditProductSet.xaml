@@ -1,0 +1,137 @@
+﻿<Window x:Class="SellManagement.View.WINEditProductSet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SellManagement.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Chi tiết combo" Height="440" Width="800"
+        FontFamily="{StaticResource MaterialDesignFont}" FontSize="13" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen" Background="#FFEEEEEE" Loaded="Window_Loaded">
+    <Grid Margin="15" Name="GRD_PRODUCTINFO">
+        <WrapPanel>
+            <TextBlock Text="Mã sản phẩm:" VerticalAlignment="Center" Width="90" FontWeight="DemiBold"/>
+            <TextBox Text="{Binding PRDCD}" VerticalAlignment="Center" Margin="5 0 0 0" Width="40" Name="TXT_PRDCD"
+                     CharacterCasing="Upper" IsReadOnly = "True"/>
+        </WrapPanel>
+
+        <WrapPanel Margin="0 35 0 0">
+            <TextBlock Text="Tên sản phẩm:" VerticalAlignment="Center"  Width="90" FontWeight="DemiBold"/>
+            <TextBox Text="{Binding PRDNM}" VerticalAlignment="Center" Margin="5 0 0 0" Width="350" IsReadOnly = "False"/>
+
+            <TextBlock Text="Hình thức:" VerticalAlignment="Center"  Width="70" FontWeight="DemiBold" Margin="20 0 0 0"/>
+            <TextBox VerticalAlignment="Center" Margin="5 0 0 0" Width="100" Text="{Binding FORM}"/>
+        </WrapPanel>
+
+        <WrapPanel Margin="0 70 0 0">
+            <TextBlock Text="Phân loại:" VerticalAlignment="Center"  Width="90" FontWeight="DemiBold"/>
+            <TextBox VerticalAlignment="Center" Margin="5 0 0 0" Width="100" Text="{Binding CATEGORY}" IsReadOnly = "True"/>
+
+            <TextBlock Text="Đơn vị:" VerticalAlignment="Center"  Width="65" FontWeight="DemiBold" Margin="50 0 0 0"/>
+            <TextBox VerticalAlignment="Center" Margin="5 0 0 0" Width="100" Text="{Binding UNTNM}"  IsReadOnly = "True"/>
+
+            <TextBlock Text="Hạn dùng:" VerticalAlignment="Center"  Width="70"
+                       Margin="50 0 0 0" FontWeight="DemiBold"/>
+            <TextBox VerticalAlignment="Center" Margin="5 0 0 0" Width="25" TextAlignment="Right" Text="{Binding EXPIRYDAY}"  IsReadOnly = "True"
+                     GotFocus="TextBox_GotFocus"/>
+            <TextBlock Text="(ngày)" VerticalAlignment="Center"  Width="70" Margin="5 0 0 0" FontWeight="DemiBold"/>
+        </WrapPanel>
+
+        <WrapPanel Margin="0 105 0 0">
+            <TextBlock Text="Trọng lượng:" VerticalAlignment="Center"  Width="90" FontWeight="DemiBold"
+                       />
+            <TextBox Text="{Binding WEIGHT, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" VerticalAlignment="Center" Margin="5 0 0 0" Width="40"
+                     TextAlignment="Right" GotFocus="TextBox_GotFocus" Name="TXT_WEIGHT"  IsReadOnly = "True"/>
+            <TextBlock Text="(g)" VerticalAlignment="Center"  Width="70" Margin="5 0 0 0" FontWeight="DemiBold"/>
+
+            <TextBlock Text="Giá vốn:" VerticalAlignment="Center"  Width="65" Margin="35 0 0 0" FontWeight="DemiBold"/>
+            <TextBox Text="{Binding PURCHASEPRICE, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" VerticalAlignment="Center" Margin="5 0 0 0" Width="100" TextAlignment="Right"
+                     GotFocus="TextBox_GotFocus" Name="TXT_PURCHASEPRICE"  IsReadOnly = "True"/>
+
+            <TextBlock Text="Giá bán:" VerticalAlignment="Center"  Width="70" Margin="50 0 0 0" FontWeight="DemiBold"/>
+            <TextBox Text="{Binding SALEPRICE, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" VerticalAlignment="Center" Margin="5 0 0 0" Width="100" TextAlignment="Right"
+                     GotFocus="TextBox_GotFocus" Name="TXT_SALEPRICE"  IsReadOnly = "True"/>
+        </WrapPanel>
+
+        <WrapPanel Margin="0 140 0 0">
+            <TextBlock Text="Ghi chú:" VerticalAlignment="Center" Width="90" FontWeight="DemiBold"/>
+            <TextBox Text="{Binding NOTE}" VerticalAlignment="Center" Margin="5 0 0 0" Width="655"  IsReadOnly = "True"/>
+        </WrapPanel>
+
+        <GroupBox Margin="0 175 0 0" Height="153" VerticalAlignment="Top" Padding="1 0 1 0">
+            <GroupBox.Header>
+                <WrapPanel VerticalAlignment="Center" Height="30">
+                    <TextBlock Text="No" Foreground="White" Width="20" VerticalAlignment="Center" Margin="6 8 0 0"/>
+                    <TextBlock Text="Mã SP" Foreground="White" Width="40" Margin="5 8 0 0"  VerticalAlignment="Center"/>
+                    <TextBlock Text="Tên SP" Foreground="White" Width="340" Margin="5 8 0 0"/>
+                    <TextBlock Text="Số lượng" Foreground="White" Width="65" Margin="5 8 0 0" TextAlignment="Right"/>
+                    <TextBlock Text="Trọng lượng" Foreground="White" Width="80" Margin="5 8 0 0" TextAlignment="Right"/>
+                    <TextBlock Text="Giá vốn" Foreground="White" Width="80" Margin="5 8 0 0" TextAlignment="Right"/>
+                    <TextBlock Text="Giá bán" Foreground="White" Width="80" Margin="5 8 0 0" TextAlignment="Right"/>
+                </WrapPanel>
+            </GroupBox.Header>
+            <ListView Name="LST_PRODUCTSET" KeyboardNavigation.TabNavigation="Cycle" AlternationCount="2" Height="120"
+                      BorderThickness="0">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}" >
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Setter Property="Padding" Value="2" />
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="IsTabStop" Value="False"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Grid Background="{TemplateBinding Background}" Height="30">
+                                        <WrapPanel>
+                                            <TextBlock Text="{Binding NO}" Width="20" VerticalAlignment="Center" Margin="6 0 0 0"/>
+                                            <TextBox Text="{Binding PRDCD}" Width="40" Margin="5 0 0 0" VerticalAlignment="Center"
+                                                     Name="TXT_CHILPRDCD" KeyDown="TXT_CHILPRDCD_KeyDown" GotFocus="TextBox_GotFocus"/>
+                                            <TextBlock Text="{Binding PRDNM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="340" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding QUANTITY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"  
+                                                     Width="50" Margin="20 0 0 0" TextAlignment="Right"
+                                                     VerticalAlignment="Center" GotFocus="TextBox_GotFocus" Name="TXT_QUANTITY" TextChanged="TXT_QUANTITY_TextChanged"
+                                                     PreviewTextInput="TXT_QUANTITY_PreviewTextInput"/>
+                                            <TextBlock Text="{Binding WEIGHT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"  Width="75" Margin="10 0 0 0" TextAlignment="Right"
+                                           VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding PURCHASEPRICE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"  Width="75" Margin="10 0 0 0" TextAlignment="Right"
+                                           VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding SALEPRICE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"  Width="75" Margin="10 0 0 0" TextAlignment="Right"
+                                           VerticalAlignment="Center"/>
+                                        </WrapPanel>
+                                    </Grid>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Trigger>
+                                        <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                            <Setter Property="Background" Value="#FFD6E4EC" />
+                                        </Trigger>
+                                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                            <Setter Property="IsSelected" Value="True" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Foreground" Value="Blue"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="Blue"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </GroupBox>
+
+        <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Content="Cập nhật" Width="100" Name="BTN_UPDATE" Click="BTN_UPDATE_Click" />
+            <Button Content="Hủy" Width="100" Margin="10 0 0 0" Name="BTN_CANCLE" Click="BTN_CANCLE_Click"/>
+        </WrapPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="SellManagement.UC.UCListProduct"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:SellManagement.UC"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1300" Background="#FFEEEEEE" Padding="15"
+             FontFamily="{StaticResource MaterialDesignFont}" FontSize="13">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=" 200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Width="200" Background="White">
+            <StackPanel VerticalAlignment="Top">
+                <GroupBox Header="Tìm kiếm" Margin="10 10 10 0">
+                    <StackPanel>
+                        <TextBox materialDesign:HintAssist.Hint="Theo mã, tên sản phẩm" materialDesign:HintAssist.HintOpacity=".26"/>
+                        <TextBox materialDesign:HintAssist.Hint="Theo ghi chú" materialDesign:HintAssist.HintOpacity=".26" 
+                             Margin="0 5 0 0"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Hình thức" Margin="10 10 10 0">
+                    <StackPanel>
+                        <WrapPanel>
+                            <CheckBox/>
+                            <TextBlock Text="Bánh lẽ" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        </WrapPanel>
+
+                        <WrapPanel Margin="0 5 0 0">
+                            <CheckBox/>
+                            <TextBlock Text="Combo - Đóng gói" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Phân loại" Margin="10 10 10 0">
+                    <StackPanel>
+                        <WrapPanel>
+                            <CheckBox/>
+                            <TextBlock Text="Bánh mặn" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        </WrapPanel>
+
+                        <WrapPanel Margin="0 5 0 0">
+                            <CheckBox/>
+                            <TextBlock Text="Bánh chay" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Tùy chon hiển thị" Margin="10 10 10 0">
+                    <StackPanel>
+                        <RadioButton Content="Tất cả" />
+                        <RadioButton Content="Đang kinh doanh" Margin="0 5 0 0"/>
+                        <RadioButton Content="Ngừng kinh doanh" Margin="0 5 0 0"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="20 0 0 0" Grid.Column="1" >
+            <Grid Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 0 18 0">
+                <Button Content="Thêm mới" Width="100" Height="35" Name="BTN_ADD" Click="BTN_ADD_Click"/>
+            </Grid>
+
+            <DataGrid Margin="0 50 0 0" Name="DTG_PRODUCTSET" AutoGenerateColumns="False" SelectionMode="Extended" SelectionUnit="FullRow"
+                      IsReadOnly="True" HorizontalScrollBarVisibility="Auto" FrozenColumnCount="2" VerticalScrollBarVisibility="Visible">
+                <DataGrid.Resources>
+                    <Style TargetType="TextBlock" x:Key="RightTextColumn">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                        <Setter Property="Background" Value="#FF2196F3"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Padding" Value="7"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                        <EventSetter Event="MouseDoubleClick" Handler="DTG_PRODUCTSETRow_MouseDoubleClick"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mã sản phẩm" Binding="{Binding PRDCD}"/>
+                    <DataGridTextColumn Header="Tên sản phẩm" Binding="{Binding PRDNM}" Width="300"/>
+                    <DataGridTextColumn Header="Hình thức" Binding="{Binding FORM}"/>
+                    <DataGridTextColumn Header="Phân loại" Binding="{Binding CATEGORY}"/>
+                    <DataGridTextColumn Header="Giá vốn" Binding="{Binding PURCHASEPRICE}"
+                                        ElementStyle="{StaticResource RightTextColumn}"/>
+                    <DataGridTextColumn Header="Giá bán" Binding="{Binding SALEPRICE}"
+                                        ElementStyle="{StaticResource RightTextColumn}"/>
+                    <DataGridTextColumn Header="Hạn sử dụng" Binding="{Binding EXPIRYDAY}"
+                                        ElementStyle="{StaticResource RightTextColumn}"/>
+                    <DataGridTextColumn Header="Tồn kho" Binding="{Binding INVENTORY}"
+                                        ElementStyle="{StaticResource RightTextColumn}"/>
+                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding STATUS}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+    </Grid>
+    
+</UserControl>
