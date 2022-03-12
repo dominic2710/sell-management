@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SellManagement.Api.Entities;
@@ -9,9 +10,10 @@ using SellManagement.Api.Entities;
 namespace SellManagement.Api.Migrations
 {
     [DbContext(typeof(SellManagementContext))]
-    partial class SellManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20220312095050_NEW_INIT")]
+    partial class NEW_INIT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

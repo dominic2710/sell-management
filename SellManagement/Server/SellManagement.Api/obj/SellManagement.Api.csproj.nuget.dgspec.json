@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PROGRAMINGS\\AzureDevops\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj": {}
+    "D:\\PROGRAMINGS\\GitRepos\\SellManagement\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj": {}
   },
   "projects": {
-    "D:\\PROGRAMINGS\\AzureDevops\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj": {
+    "D:\\PROGRAMINGS\\GitRepos\\SellManagement\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PROGRAMINGS\\AzureDevops\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj",
+        "projectUniqueName": "D:\\PROGRAMINGS\\GitRepos\\SellManagement\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj",
         "projectName": "SellManagement.Api",
-        "projectPath": "D:\\PROGRAMINGS\\AzureDevops\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj",
+        "projectPath": "D:\\PROGRAMINGS\\GitRepos\\SellManagement\\SellManagement\\Server\\SellManagement.Api\\SellManagement.Api.csproj",
         "packagesPath": "C:\\Users\\MrTam\\.nuget\\packages\\",
-        "outputPath": "D:\\PROGRAMINGS\\AzureDevops\\SellManagement\\Server\\SellManagement.Api\\obj\\",
+        "outputPath": "D:\\PROGRAMINGS\\GitRepos\\SellManagement\\SellManagement\\Server\\SellManagement.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -26,8 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://pkgs.dev.azure.com/uchida-dev/_packaging/systeminterface/nuget/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
@@ -58,6 +57,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[5.0.11, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[5.0.10, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL.Design": {
+              "target": "Package",
+              "version": "[1.1.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

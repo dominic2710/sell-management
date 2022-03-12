@@ -1,24 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using SellManagement.Api.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using Microsoft.EntityFrameworkCore.Design;
 using SellManagement.Api.Helpers;
 using SellManagement.Api.Services;
 using SellManagement.Api.Functions;
-using Microsoft.AspNetCore.Http;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Design;
 
 namespace SellManagement.Api
 {
@@ -37,7 +29,8 @@ namespace SellManagement.Api
 
             services.AddControllers();
             services.AddDbContext<SellManagementContext>(options => {
-                options.UseSqlServer(Configuration["ConnectionString"]);
+                //options.UseSqlServer(Configuration["ConnectionString"]);
+                options.UseNpgsql(Configuration["ConnectionString"]);
             });
             services.AddSwaggerGen(c =>
             {
