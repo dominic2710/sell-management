@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SellManagement.Api.Services;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace SellManagement.Api.Helpers
 {
@@ -59,5 +62,7 @@ namespace SellManagement.Api.Helpers
                 // user is not attached to context so request won't have access to secure routes
             }
         }
+
+        
     }
 }

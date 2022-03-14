@@ -15,6 +15,7 @@ namespace SellManagement.Api.Entities
         public string LoginId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public byte[] StoredSalt { get; set; }
         public string UserRole { get; set; }
     }
 }

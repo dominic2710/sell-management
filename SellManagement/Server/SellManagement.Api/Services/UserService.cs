@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,12 +18,6 @@ namespace SellManagement.Api.Services
 {
     public class UserService:IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        //private List<User> _users = new List<User>
-        //{
-        //    new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-        //};
-
         private readonly AppSettings _appSettings;
         private readonly SellManagementContext _context;
 
@@ -33,13 +29,17 @@ namespace SellManagement.Api.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _context.TblUsers.SingleOrDefault(x => x.LoginId == model.LoginId && x.Password == model.Password);
+            var user = _context.TblUsers.SingleOrDefault(x => x.LoginId == model.LoginId);
 
             // return null if user not found
             if (user == null) return null;
 
+            //Check password hashed
+            var isPasswordMatched = VerifyPassword(model.Password, user.StoredSalt, user.Password);
+            if (!isPasswordMatched) return null;
+
             // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
+            var token = GenerateJwtToken(user);
 
             return new AuthenticateResponse
             {
@@ -50,9 +50,7 @@ namespace SellManagement.Api.Services
             };
         }
 
-        // helper methods
-
-        private string generateJwtToken(TblUser user)
+        private string GenerateJwtToken(TblUser user)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -70,6 +68,35 @@ namespace SellManagement.Api.Services
         public TblUser GetUserById(int id)
         {
             return _context.TblUsers.SingleOrDefault(x => x.Id == id);
+        }
+
+        public HashSalt EncryptPassword(string password)
+        {
+            byte[] salt = new byte[128 / 8]; // Generate a 128-bit salt using a secure PRNG
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            string encryptedPassw = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8
+            ));
+            return new HashSalt { Hash = encryptedPassw, Salt = salt };
+        }
+
+        public bool VerifyPassword(string enteredPassword, byte[] salt, string storedPassword)
+        {
+            string encryptedPassw = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: enteredPassword,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8
+            ));
+            return encryptedPassw == storedPassword;
         }
     }
 }
