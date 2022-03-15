@@ -298,6 +298,7 @@ namespace SellManagement.Api.Functions
                 ShippingCompanyName = _context.TblShippingCompanys.Where(x => x.ShippingCompanyCd == entity.ShippingCompanyCd).FirstOrDefault().Name,
                 Status = entity.Status,
                 SummaryCost = entity.SummaryCost,
+                ShippingCost = entity.ShippingCost,
                 SaleOffCost = entity.SaleOffCost,
                 PaidCost = entity.PaidCost,
                 SellCost = entity.SellCost,
