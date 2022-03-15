@@ -21,8 +21,11 @@ namespace SellManagement.Api.Entities
         public virtual DbSet<TblClassifyName> TblClassifiesName { get; set; }
         public virtual DbSet<TblCustomer> TblCustomers { get; set; }
         public virtual DbSet<TblSupplier> TblSuppliers { get; set; }
+        public virtual DbSet<TblShippingCompany> TblShippingCompanys { get; set; }
         public virtual DbSet<TblPurchaseOrderHead> TblPurchaseOrderHeads { get; set; }
         public virtual DbSet<TblPurchaseOrderDetail> TblPurchaseOrderDetails { get; set; }
+        public virtual DbSet<TblSellOrderHead> TblSellOrderHeads { get; set; }
+        public virtual DbSet<TblSellOrderDetail> TblSellOrderDetails { get; set; }
         public virtual DbSet<TblVoucherNoManagement> TblVoucherNoManagements { get; set; }
         public virtual DbSet<TblProductInventory> TblProductInventories { get; set; }
     }

@@ -54,7 +54,9 @@ namespace SellManagement.Api
             services.AddScoped<IClassifyNameFunction, ClassifyNameFunction>();
             services.AddScoped<ICustomerFunction, CustomerFunction>();
             services.AddScoped<ISupplierFunction, SupplierFunction>();
+            services.AddScoped<IShippingCompanyFunction, ShippingCompanyFunction>();
             services.AddScoped<IPurchaseOrderFunction, PurchaseOrderFunction>();
+            services.AddScoped<ISellOrderFunction, SellOrderFunction>();
             services.AddScoped<IVoucherNoManagementFunction, VoucherNoManagementFunction>();
             services.AddHttpContextAccessor();
             services.AddScoped<UserOperator>();

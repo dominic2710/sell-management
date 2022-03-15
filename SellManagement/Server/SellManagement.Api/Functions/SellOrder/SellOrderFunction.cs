@@ -4,69 +4,71 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SellManagement.Api.Const;
 using SellManagement.Api.Entities;
 using SellManagement.Api.Helpers;
+using SellManagement.Api.Const;
 
 namespace SellManagement.Api.Functions
 {
-    public class PurchaseOrderFunction: IPurchaseOrderFunction
+    public class SellOrderFunction : ISellOrderFunction
     {
         SellManagementContext _context;
         IVoucherNoManagementFunction _voucherNoManagementFunction;
         UserOperator _userOperator;
-        public PurchaseOrderFunction(SellManagementContext context, IVoucherNoManagementFunction voucherNoManagementFunction, UserOperator userOperator)
+        public SellOrderFunction(SellManagementContext context, IVoucherNoManagementFunction voucherNoManagementFunction, UserOperator userOperator)
         {
             _context = context;
             _voucherNoManagementFunction = voucherNoManagementFunction;
             _userOperator = userOperator;
         }
-        public async Task<PurchaseOrder> GetPurchaseOrderByNo(string purchaseOrderNo)
+        public async Task<SellOrder> GetSellOrderByNo(string SellOrderNo)
         {
-            var entity = await _context.TblPurchaseOrderHeads.Where(x => x.PurchaseOrderNo == purchaseOrderNo).ToListAsync();
-            return entity.Select(ToPurchaseOrderModel).FirstOrDefault();
+            var entity = await _context.TblSellOrderHeads.Where(x => x.SellOrderNo == SellOrderNo).ToListAsync();
+            return entity.Select(ToSellOrderModel).FirstOrDefault();
         }
-        public async Task<IEnumerable<PurchaseOrder>> GetListPurchaseOrder()
+        public async Task<IEnumerable<SellOrder>> GetListSellOrder()
         {
-            var entity = await _context.TblPurchaseOrderHeads.ToListAsync();
-            return entity.Select(ToPurchaseOrderModel).ToList();
+            var entity = await _context.TblSellOrderHeads.ToListAsync();
+            return entity.Select(ToSellOrderModel).ToList();
         }
-        public async Task<PurchaseOrder> AddPurchaseOrder(PurchaseOrder purchaseOrder)
+        public async Task<SellOrder> AddSellOrder(SellOrder SellOrder)
         {
-            purchaseOrder.PurchaseOrderNo =await _voucherNoManagementFunction.GetVoucherNo(VoucherCategoryCd.PURCHASE_ORDER, true);
+            SellOrder.SellOrderNo = await _voucherNoManagementFunction.GetVoucherNo(VoucherCategoryCd.SELL_ORDER, true);
 
-            TblPurchaseOrderHead orderHead = new TblPurchaseOrderHead
+            TblSellOrderHead orderHead = new TblSellOrderHead
             {
-                PurchaseOrderNo = purchaseOrder.PurchaseOrderNo,
-                PurchaseOrderDate = purchaseOrder.PurchaseOrderDate,
-                PlannedImportDate = purchaseOrder.PlannedImportDate,
-                SupplierCd = purchaseOrder.SupplierCd,
-                Status = purchaseOrder.Status,
-                SummaryCost = purchaseOrder.SummaryCost,
-                SaleOffCost = purchaseOrder.SaleOffCost,
-                PaidCost = purchaseOrder.PaidCost,
-                PurchaseCost = purchaseOrder.PurchaseCost,
-                Note = purchaseOrder.Note,
+                SellOrderNo = SellOrder.SellOrderNo,
+                SellOrderDate = SellOrder.SellOrderDate,
+                PlannedExportDate = SellOrder.PlannedExportDate,
+                CustomerCd = SellOrder.CustomerCd,
+                ShippingCompanyCd = SellOrder.ShippingCompanyCd,
+                Status = SellOrder.Status,
+                SummaryCost = SellOrder.SummaryCost,
+                SaleOffCost = SellOrder.SaleOffCost,
+                ShippingCost = SellOrder.ShippingCost,
+                PaidCost = SellOrder.PaidCost,
+                SellCost = SellOrder.SellCost,
+                Note = SellOrder.Note,
                 CreateDate = DateTime.Now,
                 CreateUserId = _userOperator.GetRequestUserId(),
                 UpdateDate = DateTime.Now,
                 UpdateUserId = _userOperator.GetRequestUserId()
             };
-            await _context.TblPurchaseOrderHeads.AddAsync(orderHead);
+            await _context.TblSellOrderHeads.AddAsync(orderHead);
             await _context.SaveChangesAsync();
 
-            foreach (var detail in purchaseOrder.PurchaseOrderDetails)
+            foreach (var detail in SellOrder.SellOrderDetails)
             {
-                TblPurchaseOrderDetail orderDetail = new TblPurchaseOrderDetail
+                TblSellOrderDetail orderDetail = new TblSellOrderDetail
                 {
-                    PurchaseOrderNo = purchaseOrder.PurchaseOrderNo,
+                    SellOrderNo = SellOrder.SellOrderNo,
                     ProductCd = detail.ProductCd,
                     Quantity = detail.Quantity,
                     CostPrice = detail.CostPrice,
                     Cost = detail.Cost,
                     Note = detail.Note
                 };
-                await _context.TblPurchaseOrderDetails.AddAsync(orderDetail);
+                await _context.TblSellOrderDetails.AddAsync(orderDetail);
                 await _context.SaveChangesAsync();
 
                 //Add PlannedInpStock
@@ -103,33 +105,35 @@ namespace SellManagement.Api.Functions
                 }
             }
 
-            purchaseOrder.Id = orderHead.Id;
-            return purchaseOrder;
+            SellOrder.Id = orderHead.Id;
+            return SellOrder;
         }
-        public async Task<int> UpdatePurchaseOrder(PurchaseOrder purchaseOrder)
+        public async Task<int> UpdateSellOrder(SellOrder SellOrder)
         {
-            var entity = await _context.TblPurchaseOrderHeads.Where(x => x.PurchaseOrderNo == purchaseOrder.PurchaseOrderNo).FirstOrDefaultAsync();
+            var entity = await _context.TblSellOrderHeads.Where(x => x.SellOrderNo == SellOrder.SellOrderNo).FirstOrDefaultAsync();
             if (entity == null) return 0;
 
             int prevStatus = entity.Status;
 
-            entity.PurchaseOrderNo = purchaseOrder.PurchaseOrderNo;
-            entity.PurchaseOrderDate = purchaseOrder.PurchaseOrderDate;
-            entity.PlannedImportDate = purchaseOrder.PlannedImportDate;
-            entity.SupplierCd = purchaseOrder.SupplierCd;
-            entity.Status = purchaseOrder.Status;
-            entity.SummaryCost = purchaseOrder.SummaryCost;
-            entity.SaleOffCost = purchaseOrder.SaleOffCost;
-            entity.PaidCost = purchaseOrder.PaidCost;
-            entity.PurchaseCost = purchaseOrder.PurchaseCost;
-            entity.Note = purchaseOrder.Note;
+            entity.SellOrderNo = SellOrder.SellOrderNo;
+            entity.SellOrderDate = SellOrder.SellOrderDate;
+            entity.PlannedExportDate = SellOrder.PlannedExportDate;
+            entity.CustomerCd = SellOrder.CustomerCd;
+            entity.ShippingCompanyCd = SellOrder.ShippingCompanyCd;
+            entity.Status = SellOrder.Status;
+            entity.SummaryCost = SellOrder.SummaryCost;
+            entity.SaleOffCost = SellOrder.SaleOffCost;
+            entity.ShippingCost = SellOrder.ShippingCost;
+            entity.PaidCost = SellOrder.PaidCost;
+            entity.SellCost = SellOrder.SellCost;
+            entity.Note = SellOrder.Note;
             entity.UpdateDate = DateTime.Now;
             entity.UpdateUserId = "Admin";
 
             _context.Update(entity);
             var count = await _context.SaveChangesAsync();
 
-            var entities = await _context.TblPurchaseOrderDetails.Where(x => x.PurchaseOrderNo == purchaseOrder.PurchaseOrderNo).ToListAsync();
+            var entities = await _context.TblSellOrderDetails.Where(x => x.SellOrderNo == SellOrder.SellOrderNo).ToListAsync();
 
             //Minus InStock, PlannedInpStock
             foreach (var detail in entities)
@@ -146,28 +150,28 @@ namespace SellManagement.Api.Functions
                 await _context.SaveChangesAsync();
             }
 
-            _context.TblPurchaseOrderDetails.RemoveRange(entities);
+            _context.TblSellOrderDetails.RemoveRange(entities);
             await _context.SaveChangesAsync();
 
-            foreach (var detail in purchaseOrder.PurchaseOrderDetails)
+            foreach (var detail in SellOrder.SellOrderDetails)
             {
-                TblPurchaseOrderDetail orderDetail = new TblPurchaseOrderDetail
+                TblSellOrderDetail orderDetail = new TblSellOrderDetail
                 {
-                    PurchaseOrderNo = purchaseOrder.PurchaseOrderNo,
+                    SellOrderNo = SellOrder.SellOrderNo,
                     ProductCd = detail.ProductCd,
                     Quantity = detail.Quantity,
                     CostPrice = detail.CostPrice,
                     Cost = detail.Cost,
                     Note = detail.Note,
                 };
-                await _context.TblPurchaseOrderDetails.AddAsync(orderDetail);
+                await _context.TblSellOrderDetails.AddAsync(orderDetail);
                 await _context.SaveChangesAsync();
 
                 //Add PlannedInpStock
-                int addInStock = purchaseOrder.Status == 2 ? detail.Quantity : 0;
-                int addPlannedInpStock = purchaseOrder.Status == 0 ? detail.Quantity : 0;
+                int addInStock = SellOrder.Status == 2 ? detail.Quantity : 0;
+                int addPlannedInpStock = SellOrder.Status == 0 ? detail.Quantity : 0;
 
-                var productInventory =await _context.TblProductInventories.Where(x => x.ProductCd == orderDetail.ProductCd).FirstOrDefaultAsync();
+                var productInventory = await _context.TblProductInventories.Where(x => x.ProductCd == orderDetail.ProductCd).FirstOrDefaultAsync();
                 if (productInventory == null)
                 {
                     productInventory = new TblProductInventory
@@ -199,10 +203,10 @@ namespace SellManagement.Api.Functions
 
             return count;
         }
-        public async Task<int> UpdatePurchaseOrderStatus(string purchaseOrderNo, int status)
+        public async Task<int> UpdateSellOrderStatus(string SellOrderNo, int status)
         {
-            var entity = await _context.TblPurchaseOrderHeads.Where(x => x.PurchaseOrderNo == purchaseOrderNo).FirstOrDefaultAsync();
-            if (entity == null) return 0; 
+            var entity = await _context.TblSellOrderHeads.Where(x => x.SellOrderNo == SellOrderNo).FirstOrDefaultAsync();
+            if (entity == null) return 0;
             if (entity.Status == 2) return 0;
 
             entity.Status = status;
@@ -212,7 +216,7 @@ namespace SellManagement.Api.Functions
             _context.Update(entity);
             var count = await _context.SaveChangesAsync();
 
-            var entities = await _context.TblPurchaseOrderDetails.Where(x => x.PurchaseOrderNo == purchaseOrderNo).ToListAsync();
+            var entities = await _context.TblSellOrderDetails.Where(x => x.SellOrderNo == SellOrderNo).ToListAsync();
 
             //Minus PlannedInpStock
             foreach (var detail in entities)
@@ -246,15 +250,15 @@ namespace SellManagement.Api.Functions
 
             return count;
         }
-        public async Task<int> DeletePurchaseOrder(string purchaseOrderNo)
+        public async Task<int> DeleteSellOrder(string SellOrderNo)
         {
-            var entity = await _context.TblPurchaseOrderHeads.Where(x => x.PurchaseOrderNo == purchaseOrderNo).FirstOrDefaultAsync();
+            var entity = await _context.TblSellOrderHeads.Where(x => x.SellOrderNo == SellOrderNo).FirstOrDefaultAsync();
             if (entity == null) return 0;
 
-            _context.TblPurchaseOrderHeads.Remove(entity);
+            _context.TblSellOrderHeads.Remove(entity);
             var count = await _context.SaveChangesAsync();
 
-            var entities = await _context.TblPurchaseOrderDetails.Where(x => x.PurchaseOrderNo == purchaseOrderNo).ToListAsync();
+            var entities = await _context.TblSellOrderDetails.Where(x => x.SellOrderNo == SellOrderNo).ToListAsync();
 
             //Minus PlannedInpStock
             foreach (var detail in entities)
@@ -274,44 +278,46 @@ namespace SellManagement.Api.Functions
                 await _context.SaveChangesAsync();
             }
 
-            _context.TblPurchaseOrderDetails.RemoveRange(entities);
+            _context.TblSellOrderDetails.RemoveRange(entities);
             await _context.SaveChangesAsync();
 
 
             return count;
         }
-        private PurchaseOrder ToPurchaseOrderModel(TblPurchaseOrderHead entity)
+        private SellOrder ToSellOrderModel(TblSellOrderHead entity)
         {
-            return entity == null ? new PurchaseOrder() : new PurchaseOrder
+            return entity == null ? new SellOrder() : new SellOrder
             {
                 Id = entity.Id,
-                PurchaseOrderNo = entity.PurchaseOrderNo,
-                PurchaseOrderDate = entity.PurchaseOrderDate,
-                PlannedImportDate = entity.PlannedImportDate,
-                SupplierCd = entity.SupplierCd,
-                SupplierName = _context.TblSuppliers.Where(x=>x.SupplierCd == entity.SupplierCd).FirstOrDefault().Name,
+                SellOrderNo = entity.SellOrderNo,
+                SellOrderDate = entity.SellOrderDate,
+                PlannedExportDate = entity.PlannedExportDate,
+                CustomerCd = entity.CustomerCd,
+                CustomerName = _context.TblCustomers.Where(x => x.CustomerCd == entity.CustomerCd).FirstOrDefault().Name,
+                ShippingCompanyCd = entity.ShippingCompanyCd,
+                ShippingCompanyName = _context.TblShippingCompanys.Where(x => x.ShippingCompanyCd == entity.ShippingCompanyCd).FirstOrDefault().Name,
                 Status = entity.Status,
                 SummaryCost = entity.SummaryCost,
                 SaleOffCost = entity.SaleOffCost,
                 PaidCost = entity.PaidCost,
-                PurchaseCost = entity.PurchaseCost,
+                SellCost = entity.SellCost,
                 Note = entity.Note,
-                PurchaseOrderDetails = _context.TblPurchaseOrderDetails.ToList().Where(x=>x.PurchaseOrderNo == entity.PurchaseOrderNo)
-                                                                        .Select(ToPurchaseOrderDetailModel).ToList(),
+                SellOrderDetails = _context.TblSellOrderDetails.ToList().Where(x => x.SellOrderNo == entity.SellOrderNo)
+                                                                        .Select(ToSellOrderDetailModel).ToList(),
                 CreateDate = entity.CreateDate,
                 CreateUserId = entity.CreateUserId,
                 UpdateDate = entity.UpdateDate,
                 UpdateUserId = "Admin"
             };
         }
-        private PurchaseOrderDetail ToPurchaseOrderDetailModel(TblPurchaseOrderDetail entity)
+        private SellOrderDetail ToSellOrderDetailModel(TblSellOrderDetail entity)
         {
-            return entity == null ? new PurchaseOrderDetail() : new PurchaseOrderDetail
+            return entity == null ? new SellOrderDetail() : new SellOrderDetail
             {
                 Id = entity.Id,
-                PurchaseOrderNo = entity.PurchaseOrderNo,
+                SellOrderNo = entity.SellOrderNo,
                 ProductCd = entity.ProductCd,
-                ProductName = _context.TblProducts.Where(x=>x.ProductCd == entity.ProductCd).FirstOrDefault().Name,
+                ProductName = _context.TblProducts.Where(x => x.ProductCd == entity.ProductCd).FirstOrDefault().Name,
                 Quantity = entity.Quantity,
                 CostPrice = entity.CostPrice,
                 Cost = entity.Cost,
