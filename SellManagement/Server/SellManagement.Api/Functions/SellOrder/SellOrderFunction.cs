@@ -43,6 +43,7 @@ namespace SellManagement.Api.Functions
                 CustomerCd = SellOrder.CustomerCd,
                 ShippingCompanyCd = SellOrder.ShippingCompanyCd,
                 Status = SellOrder.Status,
+                ForControlStatus = SellOrder.ForControlStatus,
                 SummaryCost = SellOrder.SummaryCost,
                 SaleOffCost = SellOrder.SaleOffCost,
                 ShippingCost = SellOrder.ShippingCost,
@@ -121,6 +122,7 @@ namespace SellManagement.Api.Functions
             entity.CustomerCd = SellOrder.CustomerCd;
             entity.ShippingCompanyCd = SellOrder.ShippingCompanyCd;
             entity.Status = SellOrder.Status;
+            entity.ForControlStatus = SellOrder.ForControlStatus;
             entity.SummaryCost = SellOrder.SummaryCost;
             entity.SaleOffCost = SellOrder.SaleOffCost;
             entity.ShippingCost = SellOrder.ShippingCost;
@@ -297,6 +299,7 @@ namespace SellManagement.Api.Functions
                 ShippingCompanyCd = entity.ShippingCompanyCd,
                 ShippingCompanyName = _context.TblShippingCompanys.Where(x => x.ShippingCompanyCd == entity.ShippingCompanyCd).FirstOrDefault().Name,
                 Status = entity.Status,
+                ForControlStatus = entity.ForControlStatus,
                 SummaryCost = entity.SummaryCost,
                 ShippingCost = entity.ShippingCost,
                 SaleOffCost = entity.SaleOffCost,

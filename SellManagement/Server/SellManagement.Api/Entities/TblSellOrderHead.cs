@@ -14,6 +14,7 @@ namespace SellManagement.Api.Entities
         public string CustomerCd { get; set; }
         public string ShippingCompanyCd { get; set; }
         public int Status { get; set; }
+        public int ForControlStatus { get; set; }
         public int SummaryCost { get; set; }
         public int ShippingCost { get; set; }
         public int SaleOffCost { get; set; }
